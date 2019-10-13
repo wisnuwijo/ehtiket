@@ -160,6 +160,28 @@
             </a>
           </li>
         </ul>
+        <!-- Divider -->
+        <hr class="my-3">
+        <!-- Heading -->
+        <h6 class="navbar-heading text-muted">Documentation</h6>
+        <!-- Navigation -->
+        <ul class="navbar-nav mb-md-3">
+          <li class="nav-item">
+            <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/getting-started/overview.html">
+              <i class="ni ni-spaceship"></i> Getting started
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html">
+              <i class="ni ni-palette"></i> Foundation
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/components/alerts.html">
+              <i class="ni ni-ui-04"></i> Components
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
@@ -189,7 +211,7 @@
                   <img alt="Image placeholder" src="{{ asset('public/argon/img/theme/team-4-800x800.jpg') }}">
                 </span>
                 <div class="media-body ml-2 d-none d-lg-block">
-                  <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->name }}</span>
+                  <span class="mb-0 text-sm  font-weight-bold">Jessica Jones</span>
                 </div>
               </div>
             </a>
@@ -202,19 +224,22 @@
                 <span>My profile</span>
               </a>
               <a href="./examples/profile.html" class="dropdown-item">
+                <i class="ni ni-settings-gear-65"></i>
+                <span>Settings</span>
+              </a>
+              <a href="./examples/profile.html" class="dropdown-item">
+                <i class="ni ni-calendar-grid-58"></i>
+                <span>Activity</span>
+              </a>
+              <a href="./examples/profile.html" class="dropdown-item">
                 <i class="ni ni-support-16"></i>
                 <span>Support</span>
               </a>
               <div class="dropdown-divider"></div>
-                <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
-                                                                    document.getElementById('logout-form').submit();">
-                    <i class="ni ni-user-run"></i>
-                    <span>Logout</span>
-                </a>
-
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
+              <a href="#!" class="dropdown-item">
+                <i class="ni ni-user-run"></i>
+                <span>Logout</span>
+              </a>
             </div>
           </li>
         </ul>
@@ -597,7 +622,7 @@
         <div class="row align-items-center justify-content-xl-between">
           <div class="col-xl-12">
             <div class="copyright text-center text-xl-left text-muted">
-              &copy; {{ date('Y') }} <a href="#" class="font-weight-bold ml-1" target="_blank">Niket</a>
+              &copy; 20{{ date('y') }} <a href="#" class="font-weight-bold ml-1" target="_blank">Ehtiket</a>
             </div>
           </div>
         </div>

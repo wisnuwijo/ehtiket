@@ -16739,6 +16739,7 @@ textarea[resize="horizontal"] {
 .navbar-horizontal .navbar-brand {
   font-size: 0.875rem;
   font-weight: 600;
+  filter: brightness(5);
   text-transform: uppercase;
   font-size: .875rem;
   letter-spacing: .05px;

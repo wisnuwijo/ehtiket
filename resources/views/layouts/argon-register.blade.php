@@ -21,7 +21,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>
-    Masuk Niket
+    Daftar Niket
   </title>
   <!-- Favicon -->
   <link href="public/argon/img/brand/favicon.png" rel="icon" type="image/png">
@@ -65,9 +65,9 @@
           <!-- Navbar items -->
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link nav-link-icon" href="{{ url('register') }}">
+              <a class="nav-link nav-link-icon" href="{{ url('login') }}">
                 <i class="ni ni-circle-08"></i>
-                <span class="nav-link-inner--text">Daftar</span>
+                <span class="nav-link-inner--text">Masuk</span>
               </a>
             </li>
           </ul>

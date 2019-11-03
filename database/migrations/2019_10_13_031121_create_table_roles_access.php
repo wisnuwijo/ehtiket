@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableTicket extends Migration
+class CreateTableRolesAccess extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateTableTicket extends Migration
      */
     public function up()
     {
-        Schema::create('table_ticket', function (Blueprint $table) {
+        Schema::create('table_roles_access', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code')->unique();
-            $table->string('event_id');
-            $table->string('user_id');
-            $table->integer('price');
+            $table->string('role_id');
+            $table->string('module_id');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateTableTicket extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_ticket');
+        Schema::dropIfExists('table_roles_access');
     }
 }

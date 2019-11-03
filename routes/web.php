@@ -11,8 +11,17 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
+Route::get('/', function() {
+    dd('landing page');
+});
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware' => ['auth', 'role']], function() {
+
+    Route::get('events', 'EventController@index');
+    Route::get('events/add', 'EventController@add');
+    Route::post('events/add', 'EventController@store');
+});

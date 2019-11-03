@@ -32,6 +32,9 @@
         }
     },
     "autoload": {
+        "files": [
+            "app/Helpers/MainHelper.php"
+        ],
         "psr-4": {
             "Ehtiket\\": "app/"
         },

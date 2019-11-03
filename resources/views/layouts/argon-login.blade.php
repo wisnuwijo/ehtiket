@@ -39,7 +39,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
       <div class="container px-4">
-        <a class="navbar-brand" href="../index.html">
+        <a class="navbar-brand" href="{{ url('/') }}">
           <img src="public/argon/img/brand/white.png" />
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-main" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,7 +104,7 @@
               <a href="#" class="text-light"><small>Lupa Kata Sandi?</small></a>
             </div>
             <div class="col-6 text-right">
-              <a href="#" class="text-light"><small>Buat Akun Baru</small></a>
+              <a href="{{ url('register') }}" class="text-light"><small>Buat Akun Baru</small></a>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 namespace Ehtiket\Http\Controllers\Auth;
 
+use DB;
 use Ehtiket\User;
 use Ehtiket\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -63,15 +64,26 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $getInstitution = DB::table('table_institution')->count();
+        $id = $getInstitution + 1;
+
+        DB::table('table_institution')
+        ->insert([
+            'id' => $id,
+            'institution_name' => $data['institution_name'],
+            'institution_address' => $data['institution_address'],
+        ]);
+
+        $createUser = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'role_id' => $data['role_id'],
-            'identifier_type' => $data['identifier_type'],
-            'identifier_file' => $data['identifier_file'],
-            'origin_institution' => $data['origin_institution'],
+            'password' => Hash::make($data['password']),
+            'role_id' => 1,
+            'gender' => $data['gender'],
+            'institution_id' => $id,
             'phone' => $data['phone'],
-            'password' => Hash::make($data['password'])
         ]);
+
+        return $createUser;
     }
 }

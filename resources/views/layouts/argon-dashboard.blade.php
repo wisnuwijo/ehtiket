@@ -31,7 +31,7 @@
   <!-- CSS Files -->
   <link href="{{ asset('public/argon/css/argon-dashboard.css?v=1.1.0') }}" rel="stylesheet" />
 </head>
-
+@yield('css')
 <body class="">
   <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
     <div class="container-fluid">
@@ -214,6 +214,7 @@
         application: "argon-dashboard-free"
       });
   </script>
+  @yield('js')
 </body>
 
 </html>

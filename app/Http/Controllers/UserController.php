@@ -11,4 +11,9 @@ class UserController extends Controller
     {
         return view('app.register');
     }
+
+    public function show_user(Request $request)
+    {
+        dd($request->all());
+    }
 }

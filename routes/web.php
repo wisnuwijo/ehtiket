@@ -30,6 +30,13 @@ Route::group(['middleware' => ['auth', 'role']], function() {
     Route::post('events/edit', 'EventController@update');
     Route::get('events/delete/{eventId}', 'EventController@delete');
     Route::get('events/detail/{eventId}', 'EventController@event_detail');
+    Route::get('events/ticket/{trxId}','TicketController@index');
 
     Route::get('registrant', 'RegistrantController@index');
+    Route::get('registrant/list/{eventId}', 'RegistrantController@registrant_list');
+    Route::post('registrant/confirm_payment','RegistrantController@confirm_payment');
+    Route::get('registrant/detail_transaction','RegistrantController@detail_transaction');
+
+    Route::get('user','UserController@show_user');
+
 });

@@ -21,7 +21,7 @@ class CreateTableEvents extends Migration
             $table->string('event_start');
             $table->string('event_finish');
             $table->string('event_place');
-            $table->string('event_info')->nullable();
+            $table->text('event_info')->nullable();
             $table->timestamps();
         });
     }

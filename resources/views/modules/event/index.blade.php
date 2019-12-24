@@ -8,6 +8,10 @@
     .table-responsive {
         min-height: 400px;
     }
+
+    .bg-gradient-primary {
+        background: linear-gradient(87deg, #45a6c5 0, #45a6c5 100%) !important;
+    }
 </style>
 @endsection
 

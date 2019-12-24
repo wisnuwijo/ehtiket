@@ -16,10 +16,11 @@ class CreateTableTransaction extends Migration
         Schema::create('table_transaction', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('user_id');
-            $table->string('ticket_id');
+            $table->string('ticket_type_id');
             $table->string('event_id');
             $table->string('paid');
             $table->string('paid_confirmation');
+            $table->string('paid_evidence')->nullable();
             $table->timestamps();
         });
     }

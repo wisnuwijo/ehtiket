@@ -11,13 +11,11 @@
 |
 */
 
-Route::get('/', function() {
-    dd('landing page');
-});
+Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@home')->name('home');
 
 Route::group(['middleware' => ['auth', 'role']], function() {
 
@@ -38,5 +36,11 @@ Route::group(['middleware' => ['auth', 'role']], function() {
     Route::get('registrant/detail_transaction','RegistrantController@detail_transaction');
 
     Route::get('user','UserController@show_user');
+    Route::get('user/add', 'UserController@add_user');
+    Route::get('user/check_email','UserController@check_email');
+    Route::post('user/save','UserController@save');
+    Route::patch('user/save','UserController@update_user');
+    Route::get('user/delete/{id}','UserController@delete');
+    Route::get('user/edit/{id}', 'UserController@edit');
 
 });

@@ -237,6 +237,13 @@
                 </div>
             @endforeach
         </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <a href="{{ url('eventlist') }}" class="btn btn-block btn-outline-primary btn-md px-5">Lihat Semua Acara</a>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
       </div>
     </div>
 
@@ -296,7 +303,9 @@
         </div>
 
         <div class="row mt-5 justify-content-center tex-center">
-          <div class="col-md-4"><a href="#" class="btn btn-block btn-outline-primary btn-md px-5">View All Categories</a></div>
+          <div class="col-md-4">
+              <a href="#" class="btn btn-block btn-outline-primary btn-md px-5">View All Categories</a>
+          </div>
         </div>
       </div>
     </div>

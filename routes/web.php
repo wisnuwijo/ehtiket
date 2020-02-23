@@ -16,6 +16,9 @@ Route::get('/', 'HomeController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@home')->name('home');
+Route::get('/eventlist','HomeController@eventlist');
+Route::get('/event/{id}','HomeController@event_detail');
+Route::post('/event/register','HomeController@register');
 
 Route::group(['middleware' => ['auth', 'role']], function() {
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use app\User;
 use DB;
 use Auth;
+use Redirect;
 
 class UserController extends Controller
 {
@@ -116,5 +117,81 @@ class UserController extends Controller
         }
 
         return redirect('user')->with(['success' => 'Data berhasil disimpan']);
+    }
+
+    public function register_new_user(Request $request)
+    {
+        if ($request->origin_institution != null && $request->origin_institution_address != null) {
+            $institutionId = count(DB::table('table_institution')->get()) + 1;
+            $createdIntitution = DB::table('table_institution')
+                                 ->insert([
+                                     'id' => $institutionId,
+                                     'institution_name' => $request->origin_institution,
+                                     'institution_address' => $request->origin_institution_address
+                                 ]);
+        }
+
+        $createUser = DB::table('users')
+                      ->insert([
+                          'name' => $request->name,
+                          'email' => $request->email,
+                          'password' => bcrypt($request->password),
+                          'role_id' => 3,
+                          'gender' => $request->gender,
+                          'identifier_type' => $request->identifier_type,
+                          'identifier_file' => $request->identifier_file,
+                          'institution_id' => $institutionId ?? null,
+                          'phone' => $request->phone,
+                          'created_at' => now()
+                      ]);
+
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            return redirect()->intended('home');
+        }
+    }
+
+    public function register_or_login(Request $request)
+    {
+        if ($request->action == 'register') {
+            // register
+            if ($request->origin_institution != null && $request->origin_institution_address != null) {
+                $institutionId = count(DB::table('table_institution')->get()) + 1;
+                $createdIntitution = DB::table('table_institution')
+                                    ->insert([
+                                        'id' => $institutionId,
+                                        'institution_name' => $request->origin_institution,
+                                        'institution_address' => $request->origin_institution_address
+                                    ]);
+            }
+
+            $createUser = DB::table('users')
+                        ->insert([
+                            'name' => $request->name,
+                            'email' => $request->email,
+                            'password' => bcrypt($request->password),
+                            'role_id' => 3,
+                            'gender' => $request->gender,
+                            'identifier_type' => $request->identifier_type,
+                            'identifier_file' => $request->identifier_file,
+                            'institution_id' => $institutionId ?? null,
+                            'phone' => $request->phone,
+                            'created_at' => now()
+                        ]);
+
+            $credentials = $request->only('email', 'password');
+
+            if (Auth::attempt($credentials)) {
+                return Redirect::to($request->fromUrl);
+            }
+        } else {
+            // login
+            $credentials = $request->only('email', 'password');
+
+            if (Auth::attempt($credentials)) {
+                return Redirect::to($request->fromUrl);
+            }
+        }
     }
 }

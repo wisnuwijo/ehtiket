@@ -4,6 +4,10 @@ namespace Ehtiket\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Exception;
+use Mail;
+use Auth;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -53,23 +57,34 @@ class HomeController extends Controller
         return view('landingPage.eventlist', $data);
     }
 
-    public function event_detail(Request $request, $id)
+    public function event_detail(Request $request, $slug)
     {
-        $id = base64_decode($id);
+        $id = $slug;
 
         $getEvent = DB::table('table_events')
                     ->leftJoin('table_institution','table_events.institution_id','table_institution.id')
-                    ->where('table_events.id', $id)
+                    ->leftJoin('table_event_setting','table_events.id','table_event_setting.event_id')
+                    ->where('table_events.id', base64_decode($id))
+                    ->orWhere('table_events.event_slug', $id)
                     ->select([
                         'table_events.*',
                         'table_institution.institution_name',
-                        'table_institution.institution_address'
+                        'table_institution.institution_address',
+                        'table_event_setting.max_ticket_per_transaction',
+                        'table_event_setting.participant_type',
+                        'table_event_setting.min_team_member',
+                        'table_event_setting.max_team_member',
+                        'table_event_setting.point_team_lead',
+                        'table_event_setting.registration_cost',
                     ])
                     ->first();
 
-        $getTicketClass = DB::table('table_ticket_type')
-                          ->where('event_id', $id)
-                          ->get();
+        $getTicketClass = [];
+        if (isset($getEvent)) {
+            $getTicketClass = DB::table('table_ticket_type')
+                              ->where('event_id', $getEvent->id)
+                              ->get();
+        }
 
         $data = [
             'event' => $getEvent,
@@ -83,48 +98,98 @@ class HomeController extends Controller
         }
     }
 
+    public function sendEmailTest(Request $request)
+    {
+        $to_name = 'Wisnu Wijokangko';
+        $to_email = 'wisnuwijo33@gmail.com';
+        $data = array(
+            'name' => 'Meetevent',
+            'body' => 'Somebody'
+        );
+
+        Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
+            $message->to($to_email, $to_name)
+                    ->subject('Test Email');
+            $message->from('info.meetevent@gmail.com','Test Email');
+        });
+    }
+
+    public function sendEmail($toName, $toEmail, $data, $subject)
+    {
+        Mail::send('emails.mail', $data, function($message) use ($toName, $toEmail, $subject) {
+            $message->to($toEmail, $toName)
+                    ->subject($subject);
+            $message->from('info.meetevent@gmail.com',$subject);
+        });
+    }
+
     public function register(Request $request)
     {
-        $request->password = base64_encode(now());
-        $request->role_id = 3;
-        $request->created_at = now();
+        $getEventDetail = DB::table('table_events')
+                          ->where('id', $request->event_id)
+                          ->first();
 
-        // dd($request->all());
+        $getEventSetting = DB::table('table_event_setting')
+                            ->where('event_id', $request->event_id)
+                            ->first();
 
-        $institutionId = DB::table('table_institution')->count() + 1;
-        $insertInstitution = DB::table('table_institution')
-                             ->insert([
-                                 'id' => $institutionId,
-                                 'institution_name' => $request->origin_institution,
-                                 'institution_address' => $request->institution_address,
-                                 'created_at' => now()
-                             ]);
+        $decodeForm = json_decode($getEventSetting->registration_form);
+        $formData = [];
+        if (count($decodeForm) > 0) {
+            foreach ($decodeForm as $df) {
+                $formId = $df->id;
+                if (isset($request->$formId)) {
+                    $data = $request->$formId;
 
-        $userId = DB::table('users')->count() + 1;
-        $insertUser = DB::table('users')->insert([
-            'id' => $userId,
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-            'role_id' => $request->role_id,
-            'gender' => $request->gender,
-            'identifier_type' => $request->identifier_type,
-            'institution_id' => $institutionId,
-            'origin_institution' => $request->origin_institution,
-            'phone' => $request->phone,
-            'created_at' => $request->created_at
-        ]);
+                    if ($df->type == 'file') {
+                        $path = Storage::putFile(
+                            'public/form/images',
+                            $request->$formId
+                        );
 
-        $trxId = DB::table('table_transaction')->count() + 1;
+                        $data = $path;
+                    }
+
+                    $formData[] = [
+                        'id' => $df->id,
+                        'name' => $df->name,
+                        'type' => $df->type,
+                        'required' => $df->required,
+                        'values' => $df->values,
+                        'data' => $data
+                    ];
+                }
+            }
+        }
+
+        $finalFormData = json_encode($formData);
+        $this->sendEmail(
+            'Mitra Event',
+            Auth::user()->email,
+            array(
+                'name' => 'Data Name',
+                'body' => 'Data body'
+            ),
+            'Pendaftaran '.$getEventDetail->event_name
+        );
+
         $insertTrx = DB::table('table_transaction')
-                     ->insert([
-                         'id' => $trxId,
-                         'user_id' => $userId,
-                         'ticket_type_id' => $request->ticket_type_id,
-                         'event_id' => $request->event_id,
-                         'paid' => 0,
-                         'paid_confirmation' => 'no',
-                         'created_at' => now()
-                     ]);
+                    ->insert([
+                        'event_id' => $request->event_id,
+                        'user_id' => Auth::user()->id,
+                        'name' => Auth::user()->name,
+                        'email' => Auth::user()->email,
+                        'gender' => Auth::user()->gender,
+                        'identifier_type' => Auth::user()->identifier_type,
+                        'identifier_file' => Auth::user()->identifier_file,
+                        'institution_id' => Auth::user()->institution_id,
+                        'origin_institution' => Auth::user()->origin_institution,
+                        'phone' => Auth::user()->phone,
+                        'ticket_type_id' => $request->ticket_type,
+                        'paid' => $getEventDetail->event_subscription == 'paid' ? 0 : NULL,
+                        'paid_confirmation' => $getEventDetail->event_subscription == 'paid' ? 'no' : NULL,
+                        'custom_form_value' => json_encode($formData),
+                        'created_at' => now()
+                    ]);
     }
 }

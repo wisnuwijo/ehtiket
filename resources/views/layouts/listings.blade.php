@@ -62,16 +62,7 @@
             </h1>
           </div>
           <div class="col-12 col-md-10 d-none d-xl-block">
-            <nav class="site-navigation position-relative text-right" role="navigation">
-
-              <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
-                <li class="active">
-                    <a href="listings.html"><span>Buat Acara</span></a>
-                </li>
-                <li><a href="about.html"><span>Masuk</span></a></li>
-                <li><a href="blog.html"><span>Daftar</span></a></li>
-              </ul>
-            </nav>
+            @include('layouts.parts.landing-nav')
           </div>
             <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
               <a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a>

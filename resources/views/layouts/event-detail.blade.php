@@ -25,16 +25,18 @@
     <link rel="stylesheet" href="{{ asset('public/home/browse/css/style.css') }}">
 
   </head>
-  <style>
-    .convert-to-white {
-        font-size: 0.875rem;
-        font-weight: 600;
-        filter: brightness(5);
-        text-transform: uppercase;
-        font-size: .875rem;
-        letter-spacing: .05px;
-    }
-  </style>
+    <style>
+        .convert-to-white {
+            font-size: 0.875rem;
+            font-weight: 600;
+            filter: brightness(5);
+            text-transform: uppercase;
+            font-size: .875rem;
+            letter-spacing: .05px;
+        }
+
+    </style>
+    @yield('custom-css')
   <body>
 
   <div class="site-wrap">
@@ -61,33 +63,7 @@
             </h1>
           </div>
           <div class="col-12 col-md-10 d-none d-xl-block">
-            <nav class="site-navigation position-relative text-right" role="navigation">
-
-              <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
-                <li><a href="index.html"><span>Home</span></a></li>
-                <li class="has-children">
-                  <a href="about.html"><span>Dropdown</span></a>
-                  <ul class="dropdown arrow-top">
-                    <li><a href="#">Menu One</a></li>
-                    <li><a href="#">Menu Two</a></li>
-                    <li><a href="#">Menu Three</a></li>
-                    <li class="has-children">
-                      <a href="#">Dropdown</a>
-                      <ul class="dropdown">
-                        <li><a href="#">Menu One</a></li>
-                        <li><a href="#">Menu Two</a></li>
-                        <li><a href="#">Menu Three</a></li>
-                        <li><a href="#">Menu Four</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li><a href="listings.html"><span>Listings</span></a></li>
-                <li><a href="about.html"><span>About</span></a></li>
-                <li class="active"><a href="blog.html"><span>Blog</span></a></li>
-                <li><a href="contact.html"><span>Contact</span></a></li>
-              </ul>
-            </nav>
+            @include('layouts.parts.landing-nav')
           </div>
 
 
@@ -100,23 +76,17 @@
 
     </header>
 
-
-
     <div class="site-blocks-cover inner-page-cover overlay" style="background-color: #45a6c5;" data-aos="fade" data-stellar-background-ratio="0.5">
       <div class="container">
         <div class="row align-items-center justify-content-center text-center">
 
           <div class="col-md-10" data-aos="fade-up" data-aos-delay="400">
-
-
             <div class="row justify-content-center">
               <div class="col-md-8 text-center">
                 <h1>@yield('event-title')</h1>
                 <p data-aos="fade-up" data-aos-delay="100">By @yield('event-host')<span class="mx-3">&bullet;</span>@yield('event-createdAt')</p>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
@@ -124,6 +94,27 @@
 
     <div class="site-section">
       <div class="container">
+          <div class="card" style="width: 100%;margin-top:-10rem">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 style="font-weight:bold">Tentang Acara</h6>
+                            <p class="card-text">{!! $event->event_info !!}</p>
+                            <br>
+                            <button class="btn btn-xs btn-info">{{ $event->event_subscription }}</button>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 style="font-weight:bold">Tanggal Dan Waktu</h6>
+                            <p class="card-text">{{ $event->event_start }} - {{ $event->event_finish }}</p>
+                            <br>
+                            <h6 style="font-weight:bold">Lokasi</h6>
+                            <p class="card-text">{{ $event->event_place }}</p>
+
+                            @yield('event-ticket-class')
+                        </div>
+                    </div>
+                </div>
+            </div>
         <div class="row">
           <div class="col-md-12">
               <p>@yield('event-info')</p>
@@ -132,102 +123,9 @@
 
         <div class="row">
             <div class="col-md-12">
-                <table width='100%'>
-                    <tr>
-                        <td>Nama Acara</td>
-                        <td>@yield('event-title')</td>
-                    </tr>
-                    <tr>
-                        <td>Tempat</td>
-                        <td>@yield('event-place')</td>
-                    </tr>
-                    <tr>
-                        <td>Tanggal Mulai</td>
-                        <td>@yield('event-start')</td>
-                    </tr>
-                    <tr>
-                        <td>Tanggal Selesai</td>
-                        <td>@yield('event-finish')</td>
-                    </tr>
-                    <tr>
-                        <td>Pembuat Acara</td>
-                        <td>@yield('event-host')</td>
-                    </tr>
-                    <tr>
-                        <td>Alamat Pembuat Acara</td>
-                        <td>@yield('event-host-address')</td>
-                    </tr>
-                </table>
+                <iframe src="https://maps.google.com/maps?q={{ $event->event_latitude }},{{ $event->event_longitude }}&hl=id&z=10&amp;output=embed" frameborder="0" style="width:100%;height:400px"></iframe>
             </div>
         </div>
-
-        @yield('event-ticket-class')
-
-        <form action="{{ url('event/register') }}" method="post" class="bg-white" style="margin-top: 100px" id="purchaseForm" hidden>
-            @csrf
-            <h2 class="font-weight-light text-primary" id="formTitle"></h2>
-            <div class="row form-group">
-                <div class="col-md-6 mb-3 mb-md-0">
-                    <label class="text-black" for="fname">Nama</label>
-                    <input type="text" id="fname" name="name" class="form-control">
-                </div>
-                <div class="col-md-6">
-                    <label class="text-black" for="lname">No Handphone</label>
-                    <input type="number" id="lname" name="phone" class="form-control">
-                </div>
-            </div>
-
-            <div class="row form-group">
-                <div class="col-md-6 mb-3 mb-md-0">
-                    <label class="text-black" for="email">Email</label>
-                    <input type="email" id="email" name="email" class="form-control">
-                </div>
-                <div class="col-md-6">
-                    <label class="text-black" for="gender">Jenis Kelamin</label>
-                    <select name="gender" id="gender" class="form-control" required>
-                        <option value="">Pilih Jenis Kelamin</option>
-                        <option value="M">Laki-laki</option>
-                        <option value="F">Perempuan</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row form-group">
-                <div class="col-md-6 mb-3 mb-md-0">
-                    <label class="text-black" for="origin_institution">Universitas/Perusahaan/Institusi Asal</label>
-                    <input type="text" name='origin_institution' id="origin_institution" class="form-control">
-                </div>
-                <div class="col-md-6">
-                    <label class="text-black" for="institution_address">Alamat Institusi</label>
-                    <input type="text" name="institution_address" id="institution_address" class="form-control">
-                </div>
-            </div>
-
-            <div class="row form-group">
-                <div class="col-md-6 mb-3 mb-md-0">
-                    <label class="text-black" for="identifier_type">Jenis Kartu Identitas</label>
-                    <select name="identifier_type" id="identifier_type" class="form-control" required>
-                        <option value="">Pilih Kartu Identitas</option>
-                        <option value="KTP">KTP</option>
-                        <option value="SIM">SIM</option>
-                        <option value="KTM">KTM</option>
-                        <option value="Kartu Pelajar">Kartu Pelajar</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="text-black" for="identifier_file">Foto Kartu Identitas</label>
-                    <input type="file" id="identifier_file" class="form-control">
-                    <input type="hidden" name="ticket_type_id" id="ticket_type_id" value="">
-                    <input type="hidden" name="event_id" value="{{ $event->id }}">
-                </div>
-            </div>
-
-            <div class="row form-group">
-                <div class="col-md-12">
-                    <input type="submit" value="Lanjutkan" class="btn btn-primary btn-md text-white">
-                </div>
-            </div>
-        </form>
 
       </div>
     </div>
@@ -298,7 +196,7 @@
       </div>
     </footer>
   </div>
-
+  @yield('more-elements')
   <script src="{{ asset('public/home/browse/js/jquery-3.3.1.min.js') }}"></script>
   <script src="{{ asset('public/home/browse/js/jquery-migrate-3.0.1.min.js') }}"></script>
   <script src="{{ asset('public/home/browse/js/jquery-ui.js') }}"></script>

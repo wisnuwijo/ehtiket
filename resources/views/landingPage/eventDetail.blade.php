@@ -1,28 +1,40 @@
 @extends('layouts.event-detail')
 
+@section('custom-css')
+    <style>
+        @if($event->event_background != null && $event->event_background != '')
+            .site-blocks-cover {
+                background: url('{{ url($event->event_background) }}');
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: top;
+                background-position: center center;
+            }
+        @endif
+    </style>
+@endsection
+
 @section('event-title', $event->event_name)
 @section('event-host', $event->institution_name)
 @section('event-createdAt', $event->created_at)
-@section('event-info', $event->event_info)
-@section('event-start', $event->event_start)
-@section('event-finish', $event->event_finish)
-@section('event-place', $event->event_place)
-@section('event-host-address', $event->institution_address)
 
 @section('event-ticket-class')
 <div style="margin-top:30px">
-    @for($i = 0; $i < count($ticketType); $i++)
-        <button onclick="buyTicket('{{ $ticketType[$i]->name }}','{{ $ticketType[$i]->id }}')" class="btn btn-info">Beli {{ $ticketType[$i]->name }} Rp. {{ $ticketType[$i]->price }}</button>
-    @endfor
+    @if($event->event_category == '1' && $event->event_subscription == 'paid')
+        @for($i = 0; $i < count($ticketType); $i++)
+            <a href="{{ url('join') }}/{{ $event->event_slug }}?ticketType={{ $ticketType[$i]->id }}" style="margin-bottom:10px" class="btn btn-primary">Beli {{ $ticketType[$i]->name }} Rp. {{ $ticketType[$i]->price }}</a>
+        @endfor
+    @else
+        <a href="{{ url('register') }}/{{ $event->event_slug }}" class="btn btn-primary">Daftar</a>
+    @endif
 </div>
 @endsection
 
 @section('js')
 <script>
-    function buyTicket(ticketType, ticketId) {
-        $('#purchaseForm').removeAttr('hidden');
-        $('#ticket_type_id').val(ticketId);
-        $('#formTitle').text('Beli '+ticketType);
-    }
+    $(function() {
+        console.log("ready");
+        console.log("{{ Auth::check() }}");
+    });
 </script>
 @endsection

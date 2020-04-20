@@ -57,3 +57,12 @@ function generateRandomString($length = 10)
     return $randomString;
 }
 
+function base64url_encode($plainText)
+{
+    return strtr(base64_encode($plainText), '+/=', '-_,');
+}
+
+function base64url_decode($b64Text)
+{
+    return base64_decode(strtr($b64Text, '-_,', '+/='));
+}

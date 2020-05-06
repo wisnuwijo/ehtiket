@@ -33,6 +33,17 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
+                    <label class="form-control-label" for="event_category">Kategori Acara</label>
+                    <select name="event_category" class="form-control form-control-alternative" required>
+                        <option value="">Pilih Kategori Acara</option>
+                        @foreach($category as $cat)
+                            <option value="{{ $cat->id }}">{{ $cat->event_category }}</option>
+                        @endforeach
+                    </select>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
                         <label class="form-control-label" for="event_date">Tanggal & Waktu Mulai Acara</label>
                         <div class="row">
                             <div class="col-md-6">
@@ -67,7 +78,12 @@
                     </select>
                     </div>
                 </div>
-
+            </div>
+            <div id="payment_title" hidden>
+                <hr width="100%" height="10px">
+                <h6 class="heading-small text-muted mb-4">Informasi Pembayaran</h6>
+            </div>
+            <div class="row">
                 <div class="col-lg-6" id="select_bank" hidden>
                     <div class="form-group">
                     <label class="form-control-label" for="select_bank_form">Pilih Bank</label>
@@ -95,18 +111,9 @@
                     <input type="number" id="bank_account_form" class="form-control form-control-alternative" name="event_bank_number" required>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-lg-6">
-                    <div class="form-group">
-                    <label class="form-control-label" for="event_category">Kategori Acara</label>
-                    <select name="event_category" class="form-control form-control-alternative" required>
-                        <option value="">Pilih Kategori Acara</option>
-                        @foreach($category as $cat)
-                            <option value="{{ $cat->id }}">{{ $cat->event_category }}</option>
-                        @endforeach
-                    </select>
-                    </div>
-                </div>
+            <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="form-control-label" for="event_logo">Logo Acara</label>
@@ -174,13 +181,27 @@
         $('#subs_type').on('change', function () {
             var value = $(this).find(":selected").val();
             if (value == 'paid') {
+                $('#payment_title').removeAttr('hidden');
+
                 $('#select_bank').removeAttr('hidden');
+                $('#select_bank_form').attr('required','');
+
                 $('#bank_account_owner_name').removeAttr('hidden');
+                $('#bank_account_owner_name_form').attr('required','');
+
                 $('#bank_account').removeAttr('hidden');
+                $('#bank_account_form').attr('required','');
             } else {
+                $('#payment_title').attr('hidden','');
+
                 $('#select_bank').attr('hidden','');
+                $('#select_bank_form').removeAttr('required');
+
                 $('#bank_account_owner_name').attr('hidden','');
+                $('#bank_account_owner_name_form').removeAttr('required');
+
                 $('#bank_account').attr('hidden','');
+                $('#bank_account_form').removeAttr('required');
             }
         });
 

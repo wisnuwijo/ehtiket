@@ -3,6 +3,7 @@
 namespace Ehtiket\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Ehtiket\Event;
 use Auth;
 use DB;
 
@@ -217,9 +218,7 @@ class EventController extends Controller
     {
         $eventId = base64_decode($eventId);
 
-        $event = DB::table('table_events')
-                 ->where('id', $eventId)
-                 ->first();
+        $event = Event::where('id', $eventId)->first();
 
         $data = [
             'eventId' => $eventId,
@@ -261,7 +260,7 @@ class EventController extends Controller
         $insertToSetting = DB::table('table_event_setting')
                             ->insert([
                                 'event_id' => $request->event_id,
-                                'max_ticket_per_transaction' => $request->max_ticket_per_transaction,
+                                'max_ticket_per_transaction' => $request->max_ticket_per_transaction ?? 0,
                                 'participant_type' => $request->participant_type,
                                 'min_team_member' => $request->min_team_member,
                                 'max_team_member' => $request->max_team_member,

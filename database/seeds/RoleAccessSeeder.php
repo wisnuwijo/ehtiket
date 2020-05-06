@@ -44,5 +44,18 @@ class RoleAccessSeeder extends Seeder
                 'role_id' => 2,
                 'module_id' => 1,
             ]);
+
+        // buyer
+        DB::table('table_roles_access')
+            ->insert([
+                'role_id' => 3,
+                'module_id' => 1,
+            ]);
+
+        DB::table('table_roles_access')
+            ->insert([
+                'role_id' => 3,
+                'module_id' => 6,
+            ]);
     }
 }

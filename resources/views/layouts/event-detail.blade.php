@@ -105,7 +105,7 @@
                         </div>
                         <div class="col-md-4">
                             <h6 style="font-weight:bold">Tanggal Dan Waktu</h6>
-                            <p class="card-text">{{ $event->event_start }} - {{ $event->event_finish }}</p>
+                            <p class="card-text">{{ formatDate($event->event_start) }} - {{ formatDate($event->event_finish) }}</p>
                             <br>
                             <h6 style="font-weight:bold">Lokasi</h6>
                             <p class="card-text">{{ $event->event_place }}</p>
@@ -123,7 +123,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <iframe src="https://maps.google.com/maps?q={{ $event->event_latitude }},{{ $event->event_longitude }}&hl=id&z=10&amp;output=embed" frameborder="0" style="width:100%;height:400px"></iframe>
+                <iframe src="https://maps.google.com/maps?q={{ $event->event_latitude }},{{ $event->event_longitude }}&hl=id&z=15&amp;output=embed" frameborder="0" style="width:100%;height:400px"></iframe>
             </div>
         </div>
 

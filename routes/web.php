@@ -31,6 +31,9 @@ Route::group(['middleware' => ['auth', 'role']], function() {
     Route::get('events/setting/{eventId}','EventController@setting');
     Route::post('events/setting/save','EventController@save_setting');
 
+    Route::get('user-event','UserEventController@index');
+    Route::get('user-event/event/{slug}','UserEventController@event_detail');
+
     Route::get('registrant', 'RegistrantController@index')->name('registrant');
     Route::get('registrant/list/{eventId}', 'RegistrantController@registrant_list');
     Route::post('registrant/confirm_payment','RegistrantController@confirm_payment');

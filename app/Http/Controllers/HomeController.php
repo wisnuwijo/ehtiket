@@ -7,6 +7,8 @@ use DB;
 use Exception;
 use Mail;
 use Auth;
+use Ehtiket\Event;
+use Ehtiket\EventSetting;
 use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
@@ -28,8 +30,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $getEvent = DB::table('table_events')
-                    ->orderBy('id','desc')
+        $getEvent = Event::orderBy('id','desc')
                     ->limit(3)
                     ->get();
 
@@ -46,9 +47,7 @@ class HomeController extends Controller
 
     public function eventlist(Request $request)
     {
-        $getAllEvent = DB::table('table_events')
-                        ->orderBy('id','desc')
-                        ->get();
+        $getAllEvent = Event::orderBy('id','desc')->get();
 
         $data = [
             'events' => $getAllEvent
@@ -91,10 +90,11 @@ class HomeController extends Controller
             'ticketType' => $getTicketClass
         ];
 
-        if (count($getEvent) > 0) {
+        if (isset($getEvent) > 0) {
             return view('landingPage.eventDetail', $data);
         } else {
-            dd('event doesn\'t exist');
+            // dd('event doesn\'t exist');
+            return abort(404);
         }
     }
 
@@ -125,13 +125,8 @@ class HomeController extends Controller
 
     public function register(Request $request)
     {
-        $getEventDetail = DB::table('table_events')
-                          ->where('id', $request->event_id)
-                          ->first();
-
-        $getEventSetting = DB::table('table_event_setting')
-                            ->where('event_id', $request->event_id)
-                            ->first();
+        $getEventDetail = Event::where('id', $request->event_id)->first();
+        $getEventSetting = EventSetting::where('event_id', $request->event_id)->first();
 
         $decodeForm = json_decode($getEventSetting->registration_form);
         $formData = [];
@@ -185,11 +180,21 @@ class HomeController extends Controller
                         'institution_id' => Auth::user()->institution_id,
                         'origin_institution' => Auth::user()->origin_institution,
                         'phone' => Auth::user()->phone,
-                        'ticket_type_id' => $request->ticket_type,
-                        'paid' => $getEventDetail->event_subscription == 'paid' ? 0 : NULL,
-                        'paid_confirmation' => $getEventDetail->event_subscription == 'paid' ? 'no' : NULL,
+                        'ticket_type_id' => $request->ticket_type ?? 0,
+                        'paid' => 0,
+                        'paid_confirmation' => 'no',
                         'custom_form_value' => json_encode($formData),
                         'created_at' => now()
                     ]);
+
+        if ($insertTrx) {
+            $data = [
+                'event' => $getEventDetail
+            ];
+
+            return view('landingPage.eventAfterTrxMsg', $data);
+        } else {
+            return abort(404);
+        }
     }
 }

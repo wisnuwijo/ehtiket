@@ -1,5 +1,49 @@
 <?php
 
+function formatDate($date)
+{
+    $explodeDate = explode('-', $date);
+
+    $formattedDate = '';
+    if (count($explodeDate) > 0) {
+        $time = '';
+        $explodeDay = explode(' ', $explodeDate[2]);
+        if (count($explodeDay) > 1) {
+            $time = $explodeDay[1];
+            $day = $explodeDay[0];
+        } else {
+            $day = $explodeDate[2];
+        }
+
+        $monthNumber = $explodeDate[1];
+        $year = $explodeDate[0];
+
+        $monthList = [
+            'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember'
+        ];
+
+        $month = $monthList[($monthNumber - 1)];
+        if ($time != '') {
+            $formattedDate = $day.' '.$month.' '.$year.', '.$time;
+        } else {
+            $formattedDate = $day.' '.$month.' '.$year;
+        }
+    }
+
+    return $formattedDate;
+}
+
 function showModules()
 {
     $roleId = Auth::user()->role_id;

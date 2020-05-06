@@ -5,7 +5,7 @@
 <form action="{{ url('user/register_or_login') }}" method="POST" style="margin-top: 100px;display:none" id="loginForm">
     <h3>Masuk untuk melanjutkan</h3>
     <div class="alert alert-light" role="alert">
-        Belum punya akun? <button id="showRegisterBtn" onclick="hideLoginShowRegister()" class="btn btn-primary-outline alert-link">Daftar disini</button>
+        Belum punya akun? <a id="showRegisterBtn" class="btn btn-primary-outline alert-link">Daftar disini</a>
     </div>
     @csrf
 
@@ -14,11 +14,11 @@
             <label class="text-black" for="email">Email</label>
             <input type="hidden" name="action" value="login">
             <input type="hidden" name="fromUrl" value="{{ url()->full() }}">
-            <input type="email" id="email" name="email" class="form-control" required>
+            <input type="email" id="login_email" name="email" class="form-control" required>
         </div>
         <div class="col-md-12" style="margin-top:10px">
             <label class="text-black" for="password">Kata Sandi</label>
-            <input type="password" id="password" name="password" class="form-control" required>
+            <input type="password" id="login_password" name="password" class="form-control" required>
         </div>
     </div>
     <div class="row form-group">
@@ -32,7 +32,7 @@
 <form action="{{ url('user/register_or_login') }}" method="POST" class="bg-white" style="margin-top: 100px" id="registerForm">
     <h3>Daftar untuk melanjutkan</h3>
     <div class="alert alert-light" role="alert">
-        Sudah punya akun? <button id="showLoginBtn" onclick="hideRegisterShowLogin()" class="btn btn-primary-outline alert-link">Login</a>
+        Sudah punya akun? <a id="showLoginBtn" class="btn btn-primary-outline alert-link">Login</a>
     </div>
     @csrf
     <div class="row form-group">
@@ -40,14 +40,15 @@
             <label class="text-black" for="name">Nama</label>
             <input type="text" id="name" name="name" class="form-control" required>
             <input type="hidden" name="action" value="register">
+            <input type="hidden" name="fromUrl" value="{{ url()->full() }}">
         </div>
         <div class="col-md-6" style="margin-top:10px">
             <label class="text-black" for="email">Email</label>
-            <input type="email" id="email" name="email" class="form-control" required>
+            <input type="email" id="register_email" name="email" class="form-control" required>
         </div>
         <div class="col-md-6" style="margin-top:10px">
             <label class="text-black" for="password">Kata Sandi</label>
-            <input type="password" id="password" name="password" class="form-control" required>
+            <input type="password" id="register_password" name="password" class="form-control" required>
         </div>
         <div class="col-md-6" style="margin-top:10px">
             <label class="text-black" for="confirm_password">Konfirmasi Kata Sandi</label>
@@ -77,14 +78,39 @@
 
 @section('js')
 <script>
-    function hideRegisterShowLogin() {
+    $('#showLoginBtn').click(function(event){
+        console.log('show login');
+        event.preventDefault();
+
+        $('#login_email').attr('required','');
+        $('#login_password').attr('required','');
+
+        $('#name').removeAttr('required');
+        $('#register_email').removeAttr('required');
+        $('#register_password').removeAttr('required');
+        $('#confirm_password').removeAttr('required');
+        $('#gender').removeAttr('required');
+        $('#phone').removeAttr('required');
+
         $('#registerForm').hide();
         $('#loginForm').show();
-    }
+    });
 
-    function hideLoginShowRegister() {
+    $('#showRegisterBtn').click(function(event) {
+        console.log('show register');
+        event.preventDefault();
+        $('#login_email').removeAttr('required');
+        $('#login_password').removeAttr('required');
+
+        $('#name').attr('required','');
+        $('#register_email').attr('required','');
+        $('#register_password').attr('required','');
+        $('#confirm_password').attr('required','');
+        $('#gender').attr('required','');
+        $('#phone').attr('required','');
+
         $('#loginForm').hide();
         $('#registerForm').show();
-    }
+    });
 </script>
 @endsection

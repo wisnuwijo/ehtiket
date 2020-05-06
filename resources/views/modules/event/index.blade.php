@@ -59,12 +59,12 @@
                     </th>
                     <td>
                         <div class="media-body">
-                            <span class="mb-0 text-sm">{{ $ev->event_start }}</span>
+                            <span class="mb-0 text-sm">{{ formatDate($ev->event_start) }}</span>
                         </div>
                     </td>
                     <td>
                         <div class="media-body">
-                            <span class="mb-0 text-sm">{{ $ev->event_finish }}</span>
+                            <span class="mb-0 text-sm">{{ formatDate($ev->event_finish) }}</span>
                         </div>
                     </td>
                     <td>

@@ -45,5 +45,12 @@ class ModuleSeeder extends Seeder
                 'module_url' => 'user',
                 'module_icon' => 'ni ni-circle-08',
             ]);
+
+        DB::table('table_modules')
+            ->insert([
+                'module_name' => 'Acara',
+                'module_url' => 'user-event',
+                'module_icon' => 'ni ni-circle-08',
+            ]);
     }
 }

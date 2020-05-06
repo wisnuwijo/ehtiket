@@ -16,7 +16,7 @@
 
 @section('event-title', $event->event_name)
 @section('event-host', $event->institution_name)
-@section('event-createdAt', $event->created_at)
+@section('event-createdAt', formatDate($event->created_at))
 
 @section('event-ticket-class')
 <div style="margin-top:30px">

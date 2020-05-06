@@ -31,12 +31,20 @@
         <input type="hidden" value="{{ $eventId }}" name="event_id">
         <div class="pl-lg-4">
             <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group focused">
-                        <label class="form-control-label" for="max_ticket_per_transaction">Maksimal Tiket Per Transaksi</label>
-                        <input type="number" value="1" id="max_ticket_per_transaction" class="form-control form-control-alternative" name="max_ticket_per_transaction" required>
+                @if($event->event_subscription == 'paid')
+                    <div class="col-lg-6">
+                        <div class="form-group focused">
+                            <label class="form-control-label" for="max_ticket_per_transaction">Maksimal Tiket Per Transaksi</label>
+                            <input type="number" value="1" id="max_ticket_per_transaction" class="form-control form-control-alternative" name="max_ticket_per_transaction" required>
+                        </div>
                     </div>
-                </div>
+                    <div class="col-lg-6" id="registration_cost_input">
+                        <div class="form-group focused">
+                            <label class="form-control-label" for="registration_cost">Biaya Pendaftaran</label>
+                            <input type="number" id="registration_cost" class="form-control form-control-alternative" name="registration_cost" required>
+                        </div>
+                    </div>
+                @endif
                 @if(isset($event))
                     @if($event->event_category == '2')
                     {{--  jika event lomba  --}}
@@ -51,32 +59,26 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-6" id="max_team_member_input">
+                        <div class="col-lg-6" id="min_team_member_input" hidden>
                             <div class="form-group focused">
                                 <label class="form-control-label" for="min_team_member">Anggota Minimal Kelompok</label>
-                                <input type="number" id="min_team_member" class="form-control form-control-alternative" name="min_team_member" required>
+                                <input type="number" id="min_team_member" class="form-control form-control-alternative" name="min_team_member">
                             </div>
                         </div>
-                        <div class="col-lg-6" id="max_team_member_input">
+                        <div class="col-lg-6" id="max_team_member_input" hidden>
                             <div class="form-group focused">
                                 <label class="form-control-label" for="max_team_member">Anggota Maksimal Kelompok</label>
-                                <input type="number" id="max_team_member" class="form-control form-control-alternative" name="max_team_member" required>
+                                <input type="number" id="max_team_member" class="form-control form-control-alternative" name="max_team_member">
                             </div>
                         </div>
-                        <div class="col-lg-6" id="point_team_lead_input">
+                        <div class="col-lg-6" id="point_team_lead_input" hidden>
                             <div class="form-group focused">
                                 <label class="form-control-label" for="point_team_lead">Wajibkan Penunjukkan Ketua Kelompok</label>
-                                <select name="point_team_lead" id="point_team_lead" class="form-control form-control-alternative" required>
+                                <select name="point_team_lead" id="point_team_lead" class="form-control form-control-alternative">
                                     <option value="">Pilih</option>
                                     <option value="1">Wajib</option>
                                     <option value="0">Tidak Wajib</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-6" id="registration_cost_input">
-                            <div class="form-group focused">
-                                <label class="form-control-label" for="registration_cost">Biaya Pendaftaran</label>
-                                <input type="number" id="registration_cost" class="form-control form-control-alternative" name="registration_cost" required>
                             </div>
                         </div>
                     @endif
@@ -265,6 +267,30 @@
             });
         }
     }
+
+    $('#participant_type').change(function(e) {
+        var participantType = $(this).val();
+
+        if (participantType != 'individu') {
+            $('#min_team_member_input').removeAttr('hidden');
+            $('#min_team_member').attr('required','');
+
+            $('#max_team_member_input').removeAttr('hidden');
+            $('#max_team_member').attr('required','');
+
+            $('#point_team_lead_input').removeAttr('hidden');
+            $('#point_team_lead').attr('required','');
+        } else {
+            $('#min_team_member_input').attr('hidden','');
+            $('#min_team_member').removeAttr('required');
+
+            $('#max_team_member_input').attr('hidden','');
+            $('#max_team_member').removeAttr('required');
+
+            $('#point_team_lead_input').attr('hidden','');
+            $('#point_team_lead').removeAttr('required');
+        }
+    });
 
     $(document).ready(function(){
 

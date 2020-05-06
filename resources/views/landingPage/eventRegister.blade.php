@@ -17,7 +17,7 @@
     <input type="hidden" name="event_id" value="{{ $event->id }}">
     <input type="hidden" name="event_category_id" value="{{ $event->eventCategoryId }}">
     <input type="hidden" name="event_category" value="{{ $event->event_category }}">
-    <input type="hidden" name="ticket_type" value="{{ $_GET['ticketType'] }}">
+    <input type="hidden" name="ticket_type" value="{{ $_GET['ticketType'] ?? null }}">
     <h2 class="font-weight-light text-primary" id="formTitle">Registrasi</h2>
     <div class="row form-group">
         @foreach($form as $fm)
